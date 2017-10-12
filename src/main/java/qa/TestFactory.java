@@ -5,15 +5,6 @@ import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 
 
-import java.io.IOException;
-
-
-
-/**
- * Base test behaviour @before, @after, @rules method tor Test cases and log test results. Web driver initialization.
- *
- * @author Speroteck QA Team (qa@speroteck.com)
- */
 public abstract class TestFactory {
 
     @BeforeClass
@@ -22,7 +13,7 @@ public abstract class TestFactory {
     }
 
     @AfterClass
-    public static void tearDownClass() throws IOException {
+    public static void tearDownClass() {
         staticLog("@AfterClass");
     }
 
@@ -35,7 +26,7 @@ public abstract class TestFactory {
     public TestWatcher watcher = new MyTestWatcher();
 
     @Rule
-    public  FailedTestRule onFailure = new FailedTestRule();
+    public FailedTestHook onFailure = new FailedTestHook();
 
     @Before
     public void setUp() {
@@ -43,15 +34,13 @@ public abstract class TestFactory {
     }
 
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() {
         log("@After");
     }
 
 
     public void log(String msg) {
-//        String currentClass = Thread.currentThread().getStackTrace()[2].getClassName().replace("test.", "");
         String currentClass = this.toString().replace("test.", "");
-
         System.out.println(currentClass+ ":: \t\t" + msg);
     }
 
@@ -60,19 +49,15 @@ public abstract class TestFactory {
         System.out.println(msg + " \t\t<< " + currentClass);
     }
 
-    private void println(String string) {
-        log(string);
-    }
-
-    public void logTestName() {
+    void logTestName() {
         log("@Test " + testName.getMethodName() + "()");
     }
 
-    public void logSkipTest() {
+    void logSkipTest() {
         log("ERROR: If you read this: @Test " + testName.getMethodName() + "() was not skipped!");
     }
 
-    public String getFailMessage() {
+    String getFailMessage() {
         return "@Test " + testName.getMethodName() + "() - Fail";
     }
 

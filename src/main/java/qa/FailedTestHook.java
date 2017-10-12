@@ -7,7 +7,7 @@ import org.junit.runners.model.Statement;
 
 import static qa.TestFactory.staticLog;
 
-public class FailedTestRule  implements MethodRule {
+public class FailedTestHook implements MethodRule {
 
     public Statement apply(final Statement statement, final FrameworkMethod frameworkMethod, final Object o) {
         return new Statement() {
@@ -17,7 +17,7 @@ public class FailedTestRule  implements MethodRule {
                     statement.evaluate();
                 } catch (Throwable t) {
                     // exception will be thrown only when a test fails.
-                    staticLog("Failing Injection");
+                    staticLog("onFail Hook");
                     // rethrow to allow the failure to be reported by JUnit
                     throw t;
                 }
